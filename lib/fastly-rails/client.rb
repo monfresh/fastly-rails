@@ -3,7 +3,7 @@ require 'fastly'
 module FastlyRails
   # A simple wrapper around the fastly-ruby client.
   class Client < DelegateClass(Fastly)
-    def initialize(opts={})
+    def initialize(opts = {})
       super(Fastly.new(opts))
     end
 
@@ -13,7 +13,7 @@ module FastlyRails
     end
 
     def purge_url(key)
-      "/service/#{FastlyRails.service_id}/purge/#{key}"
+      "/service/#{FastlyRails.customer_key}/purge/#{key}"
     end
   end
 end

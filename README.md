@@ -27,11 +27,11 @@ Create an initializer for Fastly configuration
 FastlyRails.configure do |c|
   c.api_key = ENV['FASTLY_API_KEY']  # Fastly api key, required
   c.max_age = 86400                  # time in seconds, optional, defaults to 2592000 (30 days)
-  c.service_id = ENV['SERVICE_ID']   # The Fastly service you will be using, required
+  c.customer_key = ENV['FASTLY_CUSTOMER_KEY']   # The Fastly service you will be using, required
 end
 ````
 > Note: purging only requires that you authenticate with your `api_key`. However, you can provide a `user` and `password` if you are using other endpoints in fastly-ruby that require full-auth.
-> Also, you must provide a service_id for purges to work.
+> Also, you must provide a customer_key for purges to work.
 
 ## Usage
 
@@ -79,7 +79,7 @@ To do this use the `set_surrogate_key_header` method on GET actions.
 class BooksController < ApplicationController
   # include this before_filter in controller endpoints that you wish to edge cache
   before_filter :set_cache_control_headers, only: [:index, :show]
-  # This can be used with any customer actions. Set these headers for GETs that you want to cache 
+  # This can be used with any customer actions. Set these headers for GETs that you want to cache
   # e.g. before_filter :set_cache_control_headers, only: [:index, :show, :my_custom_action]
 
   def index
@@ -141,22 +141,7 @@ class Book < ActiveRecord
 end
 ````
 
-We have left these out intentially, as they could potentially cause issues when running locally or testing. If you do use these, pay attention, as using callbacks could also inadvertently overwrite HTTP Headers like Cache-Control or Set-Cookie and cause responses to not be properly cached.
-
-### Service id
-
-One thing to note is that currently we expect a service_id to be defined in your FastlyRails.configuration.  However, we've added localized methods so that your models can override your global service_id, if you needed to operate on more than one for any reason.
-
-Currently, this would require you to basically redefine `service_id` on the class level of your model:
-
-````ruby
-class Book < ActiveRecord::Base
-  def self.service_id
-    'MYSERVICEID'
-  end
-end
-````
-
+We have left these out intentionally, as they could potentially cause issues when running locally or testing. If you do use these, pay attention, as using callbacks could also inadvertently overwrite HTTP Headers like Cache-Control or Set-Cookie and cause responses to not be properly cached.
 
 ### Sessions, Cookies, and private data
 

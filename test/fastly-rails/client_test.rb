@@ -1,10 +1,9 @@
 require 'test_helper'
 
 describe FastlyRails::Client do
-
   let(:client) do
     FastlyRails::Client.new(
-      :api_key => 'KEY', :user => 'USER', :password => 'PASS'
+      api_key: 'KEY', user: 'USER', password: 'PASS'
     )
   end
 
@@ -21,7 +20,6 @@ describe FastlyRails::Client do
   # through this interface, we can ensure they're available via this test
 
   it 'should respond to methods available in the fastly client' do
-
     methods = [
       :purge,
       :get_service
@@ -30,12 +28,11 @@ describe FastlyRails::Client do
     methods.each do |method|
       assert_respond_to client, method
     end
-
   end
 
   describe 'purge_by_key' do
-    it 'raises if purge called and no service id configured' do
-      FastlyRails.configuration.service_id = nil
+    it 'raises if purge called and no customer key configured' do
+      FastlyRails.configuration.customer_key = nil
 
       assert_raises FastlyRails::NoServiceIdProvidedError do
         client.purge_by_key('test')
@@ -43,11 +40,11 @@ describe FastlyRails::Client do
     end
 
     it 'should call Fastly::Client.post method with the purge url' do
-      FastlyRails.configuration.service_id = 'testly'
-      assert_equal "/service/#{FastlyRails.service_id}/purge/test", client.purge_url('test')
+      FastlyRails.configuration.customer_key = 'testly'
+      assert_equal "/service/#{FastlyRails.customer_key}/purge/test", client.purge_url('test')
 
       resp = client.purge_by_key('test')
-      assert_equal "ok", resp['status']
+      assert_equal 'ok', resp['status']
     end
 
     it 'should be authed' do
@@ -59,5 +56,4 @@ describe FastlyRails::Client do
       assert_equal true, client.authed?
     end
   end
-
 end

@@ -13,7 +13,7 @@ describe FastlyRails::Configuration do
       :user,
       :password,
       :max_age,
-      :service_id
+      :customer_key
     ]
 
     methods.each do |method|
@@ -69,20 +69,20 @@ describe FastlyRails::Configuration do
     assert_equal FastlyRails::Configuration.max_age_default, configuration.max_age
   end
 
-  describe 'invalid_service_id?' do
-    it 'should return true for a nil service_id' do
-      assert_nil configuration.service_id
-      assert_equal true, configuration.invalid_service_id?
+  describe 'invalid_customer_key?' do
+    it 'should return true for a nil customer_key' do
+      assert_nil configuration.customer_key
+      assert_equal true, configuration.invalid_customer_key?
     end
 
-    it 'should return true for a blank service_id' do
-      configuration.service_id = ''
-      assert_equal true, configuration.invalid_service_id?
+    it 'should return true for a blank customer_key' do
+      configuration.customer_key = ''
+      assert_equal true, configuration.invalid_customer_key?
     end
 
-    it 'should return false for a non-blank, non-nil service_id' do
-      configuration.service_id = 'notblank'
-      assert_equal false, configuration.invalid_service_id?
+    it 'should return false for a non-blank, non-nil customer_key' do
+      configuration.customer_key = 'notblank'
+      assert_equal false, configuration.invalid_customer_key?
     end
   end
 end

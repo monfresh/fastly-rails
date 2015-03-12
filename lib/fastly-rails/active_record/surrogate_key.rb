@@ -7,17 +7,12 @@ module FastlyRails
       extend ActiveSupport::Concern
 
       module ClassMethods
-
         def purge_all
           FastlyRails.client.purge_by_key(table_key)
         end
 
         def table_key
           table_name
-        end
-
-        def service_id
-          FastlyRails.service_id
         end
       end
 
@@ -35,10 +30,6 @@ module FastlyRails
 
       def purge_all
         self.class.purge_all
-      end
-
-      def service_id
-        self.class.service_id
       end
     end
   end
